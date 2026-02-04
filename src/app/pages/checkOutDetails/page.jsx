@@ -171,9 +171,30 @@ const CheckOutDetails = () => {
                     </div>
                   </div>
                 </div>
-                <button className="w-full h-[35px] bg-yellow-100 outline-none rounded-[6px] mt-4">
-                  Pay Now-
+                <button 
+                  onClick={handleCreateOrder}
+                  disabled={loading}
+                  className="w-full h-[35px] bg-yellow-100 outline-none rounded-[6px] mt-4 disabled:opacity-50"
+                >
+                  {loading ? "Processing..." : `Pay $${calculateTotal()}`}
                 </button>
+                
+                {/* Show Cart Summary */}
+                {cartItems.length > 0 && (
+                  <div className="mt-6 p-4 bg-gray-100 rounded-lg">
+                    <h6 className="font-semibold mb-3">Order Summary</h6>
+                    {cartItems.map((item, index) => (
+                      <div key={index} className="flex justify-between py-2 border-b">
+                        <span className="text-sm">{item.fullData.name} x {item.quantity}</span>
+                        <span className="text-sm font-medium">${(item.fullData.price * item.quantity).toFixed(2)}</span>
+                      </div>
+                    ))}
+                    <div className="flex justify-between py-2 font-bold text-lg">
+                      <span>Total:</span>
+                      <span>${calculateTotal().toFixed(2)}</span>
+                    </div>
+                  </div>
+                )}
               </div>
             </form>
             <div className="bg-green-800 w-[400px] p-[15px]">
