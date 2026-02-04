@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const CheckOutDetails = () => {
   const [input, setInput] = useState([
