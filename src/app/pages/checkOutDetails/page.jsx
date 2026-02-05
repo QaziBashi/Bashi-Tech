@@ -281,7 +281,8 @@ const CheckOutDetails = () => {
         return;
       }
 
-      console.log("Using userId:", userId);
+console.log("Using userId:", userId);
+      console.log("Cart items structure:", cartItems[0]);
 
       // 1️⃣ Create order
       const orderRes = await fetch("http://localhost:4000/api/orders/create", {
@@ -293,16 +294,20 @@ const CheckOutDetails = () => {
         body: JSON.stringify({
           userId,
           items: cartItems.map((item) => ({
-            name: item.fullData.name,
-            price: item.fullData.price,
-            quantity: item.quantity,
-            productId: item.productId,
+            name: item.fullData?.name || item.name || 'Unknown Product',
+            price: item.fullData?.price || item.price || 0,
+            quantity: item.quantity || 1,
+            productId: item.productId || item._id,
           })),
         }),
       });
 
-      const orderData = await orderRes.json();
-      if (!orderData.success) throw new Error(orderData.error);
+const orderData = await orderRes.json();
+      console.log("Order response:", orderData);
+      if (!orderData.success) {
+        console.error("Order creation failed:", orderData.error);
+        throw new Error(orderData.error);
+      }
 
       // 2️⃣ Stripe session
       const stripeRes = await fetch(
@@ -321,13 +326,17 @@ const CheckOutDetails = () => {
         },
       );
 
-      const stripeData = await stripeRes.json();
-      if (!stripeData.url) throw new Error("Stripe session failed");
+const stripeData = await stripeRes.json();
+      console.log("Stripe response:", stripeData);
+      if (!stripeData.url) {
+        console.error("Stripe session failed:", stripeData.error);
+        throw new Error(stripeData.error || "Stripe session failed");
+      }
 
       window.location.href = stripeData.url;
-    } catch (err) {
-      console.error(err);
-      alert("Checkout failed");
+} catch (err) {
+      console.error("Full checkout error:", err);
+      alert("Checkout failed: " + err.message);
     } finally {
       setLoading(false);
     }
