@@ -271,7 +271,7 @@ const CheckOutDetails = () => {
       
       // Fallback to hardcoded for testing
       if (!userId) {
-        userId = "507f1f77bcf86cd799439011";
+        userId = "69819fe8dfd7d29e37fbd86b";  // Use actual user ID from database
         console.log("Using fallback userId for testing");
       }
 
