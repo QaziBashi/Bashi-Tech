@@ -40,7 +40,10 @@ const LogInPage = () => {
     if (!password) return alert("Password is required");
 
     try {
-      const res = await fetch("http://localhost:4000/api/auth/signin", {
+      const API_URL = process.env.NODE_ENV === 'production' 
+       ? 'https://bashi-tech-production.up.railway.app' 
+       : 'http://localhost:4000';
+     const res = await fetch(`${API_URL}/api/auth/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

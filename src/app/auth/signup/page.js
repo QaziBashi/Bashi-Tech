@@ -32,8 +32,12 @@ const SignUpPage = () => {
     if (!confirmpassword) return alert("Please Confirm your password");
     if (!agree) return alert("You must agree to the Terms & Privacy Policy");
 
-    try {
-      const res = await fetch("http://localhost:4000/api/auth/signup", {
+     const API_URL = process.env.NODE_ENV === 'production' 
+       ? 'https://bashi-tech-production.up.railway.app' 
+       : 'http://localhost:4000';
+     
+     try {
+       const res = await fetch(`${API_URL}/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

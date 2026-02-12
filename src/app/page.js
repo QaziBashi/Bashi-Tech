@@ -3,6 +3,7 @@ import React from "react";
 import OurProducts from "./components/ourProducts/page";
 import OurServices from "./components/ourServices/page";
 import Footer from "./components/Footer/page";
+import DeviceDiagnostics from "@/app/components/DeviceDiagnostics";
 const Home = () => {
   return (
     <div className="w-100%">
@@ -18,6 +19,7 @@ const Home = () => {
       <div className="w-full p-10">
         <img src="/header-images/maxresdefault.jpg" className="w-full" />
       </div>
+      <DeviceDiagnostics />
       {/* <Footer /> */}
     </div>
   );

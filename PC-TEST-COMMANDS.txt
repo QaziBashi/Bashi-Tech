@@ -1,0 +1,28 @@
+# Port 4000 Test Commands
+
+## 1. Check if port is available
+netstat -ano | findstr :4000
+
+## 2. Test local backend connection
+telnet localhost 4000
+
+## 3. Check if Node.js server is running
+tasklist | findstr node
+
+## 4. Test with specific browser
+Try accessing: http://localhost:4000
+
+## 5. Check firewall (Windows)
+# Open Command Prompt as Administrator and run:
+netsh advfirewall firewall add rule name="Allow Node.js" dir=in action=allow protocol=TCP localport=4000
+
+## 6. Check backend logs
+cd D:\BashiTech\bashi-tech\backend
+npm run dev
+
+## What to look for:
+- ❌ "EADDRINUSE" errors (port already in use)
+- ❌ Connection refused errors
+- ❌ Firewall blocking messages
+
+## Copy and paste the output when running these tests.
