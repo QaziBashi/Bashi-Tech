@@ -8,7 +8,7 @@ const response = await fetch(`${API_URL}/api/auth/signup`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': ['https://bashi-tech-production.up.railway.app', 'http://localhost:3000', 'http://localhost:4000'],
   },
   body: JSON.stringify({
     name,

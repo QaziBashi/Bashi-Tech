@@ -41,8 +41,36 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const connectToDB = require("./lib/mongodb");
+require("dotenv").config();
 
 const app = express();
+
+// Add CORS
+app.use(cors({
+  origin: ['https://bashi-tech-production.up.railway.app', 'http://localhost:3000', 'https://localhost:4000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Origin'],
+}));
+
+// Enable CORS for all origins
+app.use(
+  cors({
+    origin: [
+      "https://bashi-tech-production.up.railway.app",
+      "http://localhost:3000",
+      "https://localhost:4000",
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Origin",
+    ],
+  }),
+);
 
 app.use(cors());
 app.use(express.json());
@@ -58,22 +86,11 @@ const stripePaymentIntents = require("./routes/stripePaymentIntents");
 const orderRoutes = require("./routes/orderRoutes");
 const adminVerification = require("./routes/adminVerification");
 
-app.use("/api/auth", authRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/admin-verify", adminVerification);
-app.use("/api/products", productRoutes);
-app.use("/api", favouriteRoutes);
-app.use("/api/upload", uploadRoutes);
-app.use("/api/stripe", stripeRoutes);
-app.use("/api/stripe", stripePaymentIntents);
-app.use("/api/orders", orderRoutes);
-
 // ping route
-app.get("/api/ping", (req, res) =>
-  res.json({ ok: true, time: Date.now() })
-);
+app.get("/api/ping", (req, res) => res.json({ ok: true, time: Date.now() }));
 
-const port = process.env.PORT || 4000;
+// health check route
+app.use("/health", require("./routes/health").call);
 
 // connect DB & start server
 connectToDB()
@@ -81,13 +98,5 @@ connectToDB()
     console.log("Connected to MongoDB");
   })
   .catch((err) => {
-    console.error(
-      "Failed to connect to DB (continuing without DB):",
-      err.message || err
-    );
-  })
-  .finally(() => {
-    app.listen(port, () => {
-      console.log(`Backend listening on http://localhost:${port}`);
-    });
+    console.error("DB Connection Error:", err.message || err);
   });
